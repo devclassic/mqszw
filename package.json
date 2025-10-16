@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "run-p backend:dev frontend:dev",
-    "build": "node scripts/release.js",
+    "build": "node scripts/build.js",
     "frontend:dev": "vite",
     "frontend:build": "vite build",
     "backend:dev": "node --watch src-server/index.js",
