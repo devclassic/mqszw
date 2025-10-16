@@ -5,14 +5,21 @@
   "type": "module",
   "scripts": {
     "dev": "run-p backend:dev frontend:dev",
-    "build": "node scripts/build.js",
-    "frontend:dev": "vite",
+    "build": "pnpm clean && node scripts/build.js",
+    "clean": "node scripts/clean.js",
+    "frontend:dev": "vite --host",
     "frontend:build": "vite build",
     "backend:dev": "node --watch src-server/index.js",
-    "backend:build": "deno compile -A -o release/server src-server/index.js"
+    "backend:build": "deno compile -A --target x86_64-unknown-linux-gnu -o release/server src-server/index.js"
   },
   "dependencies": {
+    "@microsoft/fetch-event-source": "^2.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
     "express": "^5.1.0",
+    "markdown-it": "^14.1.0",
+    "node-fetch": "^3.3.2",
+    "pinia": "^3.0.3",
     "vue": "^3.5.22",
     "vue-router": "^4.6.2"
   },
