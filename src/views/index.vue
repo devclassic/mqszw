@@ -11,6 +11,7 @@
         @touchstart="asrstart"
         @touchend="asrstop"
         @touchcancel="asrstop"
+        @pointerup="asrstop"
         class="mic"></div>
       <div @click="state.showList = !state.showList" class="btn"></div>
     </div>
@@ -69,7 +70,8 @@
     }
   )
 
-  const asrstart = () => {
+  const asrstart = e => {
+    e.preventDefault()
     state.isRecording = true
   }
 
