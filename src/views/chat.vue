@@ -148,6 +148,9 @@
   }
 
   const submit = () => {
+    if (!state.query.trim()) {
+      return
+    }
     state.messages.push({
       pos: 'right',
       text: state.query,

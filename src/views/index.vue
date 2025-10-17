@@ -92,6 +92,9 @@
   }
 
   const submit = type => {
+    if (!state.query.trim()) {
+      return
+    }
     store.type = type
     store.query = state.query
     router.push('/chat')
