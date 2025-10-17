@@ -24,7 +24,6 @@
         @touchstart="asrstart"
         @touchend="asrstop"
         @touchcancel="asrstop"
-        @pointerup="asrstop"
         class="mic"></div>
       <div @click="submit" class="btn"></div>
     </div>
@@ -122,22 +121,8 @@
     }
   )
 
-  let done = false
-  const release = () => {
-    if (done) return
-    done = true
-    state.isRecording = false
-  }
-
-  const asrstart = e => {
-    e.preventDefault()
+  const asrstart = () => {
     state.isRecording = true
-    done = false
-    setTimeout(() => {
-      if (!done) {
-        release()
-      }
-    }, 300)
   }
 
   const asrstop = () => {
