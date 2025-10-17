@@ -70,9 +70,22 @@
     }
   )
 
+  let done = false
+  const release = () => {
+    if (done) return
+    done = true
+    state.isRecording = false
+  }
+
   const asrstart = e => {
     e.preventDefault()
     state.isRecording = true
+    done = false
+    setTimeout(() => {
+      if (!done) {
+        release()
+      }
+    }, 300)
   }
 
   const asrstop = () => {
