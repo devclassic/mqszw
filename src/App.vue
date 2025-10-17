@@ -64,6 +64,8 @@
     width: 100vw;
     height: 100vh;
     position: fixed;
+    user-select: none;
+    -webkit-user-select: none;
   }
 
   html.android-lock,
