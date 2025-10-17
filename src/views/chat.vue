@@ -15,9 +15,15 @@
         </template>
       </div>
     </div>
+    <div v-if="state.isAsr" class="asr"></div>
     <div class="input-box">
       <input type="text" v-model="state.query" class="input" />
-      <div class="mic"></div>
+      <div
+        @mousedown="asrstart"
+        @mouseup="asrstop"
+        @touchstart="asrstart"
+        @touchend="asrstop"
+        class="mic"></div>
       <div @click="submit" class="btn"></div>
     </div>
     <div class="line"></div>
@@ -28,13 +34,16 @@
   import { useInput } from '../hooks/useInput'
   import { useRouter } from 'vue-router'
   import { useLinkStore } from '../stores/useLinkStore'
-  import { reactive, onMounted, useTemplateRef } from 'vue'
+  import { useRecorder } from '../hooks/useRecorder'
+  import { reactive, onMounted, useTemplateRef, watch } from 'vue'
   import { fetchEventSource } from '@microsoft/fetch-event-source'
   import markdownit from 'markdown-it'
 
   const state = reactive({
     query: '',
     messages: [],
+    isAsr: false,
+    isRecording: false,
     wrapRef: useTemplateRef('wrap'),
   })
 
@@ -42,6 +51,7 @@
 
   const router = useRouter()
   const store = useLinkStore()
+  const recorder = useRecorder()
   const md = markdownit()
 
   onMounted(() => {
@@ -89,6 +99,28 @@
       },
     })
   })
+
+  watch(
+    () => state.isRecording,
+    async isRecording => {
+      if (isRecording) {
+        recorder.start()
+        state.isAsr = true
+      } else {
+        state.isAsr = false
+        const text = await recorder.getResult()
+        state.query = text
+      }
+    }
+  )
+
+  const asrstart = () => {
+    state.isRecording = true
+  }
+
+  const asrstop = () => {
+    state.isRecording = false
+  }
 
   const back = () => {
     router.push('/')
@@ -290,5 +322,15 @@
     background: url('../assets/chat-line.png') no-repeat center / 100% 100%;
     position: absolute;
     bottom: 3.733333333333333vw;
+  }
+
+  .asr {
+    width: 20vw;
+    height: 20vw;
+    background: url('../assets/asr.gif') no-repeat center / 100% 100%;
+    z-index: 999;
+    position: absolute;
+    right: 20.5vw;
+    bottom: 16vw;
   }
 </style>

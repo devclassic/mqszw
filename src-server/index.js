@@ -1,9 +1,27 @@
 import 'dotenv/config'
 import express from 'express'
+import multer from 'multer'
 import cors from 'cors'
 import fetch from 'node-fetch'
+import fs from 'fs-extra'
+import RPCClient from '@alicloud/pop-core'
+import axios from 'axios'
+import path from 'path'
 
 const app = express()
+
+const storage = multer.diskStorage({
+  destination: async (req, file, cb) => {
+    await fs.mkdirs('uploads')
+    cb(null, 'uploads')
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname)
+    cb(null, Date.now() + ext)
+  },
+})
+
+const upload = multer({ storage })
 
 app.use(cors())
 app.use(express.static('public'))
@@ -36,6 +54,41 @@ app.post('/chat', async (req, res) => {
     }),
   })
   difyRes.body.pipe(res)
+})
+
+const tokenCache = { value: null, expire: 0 }
+async function getToken() {
+  if (Date.now() < tokenCache.expire) return tokenCache.value
+
+  const client = new RPCClient({
+    accessKeyId: process.env.ACCESS_KEY_ID,
+    accessKeySecret: process.env.ACCESS_KEY_SECRET,
+    endpoint: 'http://nls-meta.cn-shanghai.aliyuncs.com',
+    apiVersion: '2019-02-28',
+  })
+  const ret = await client.request('CreateToken')
+  tokenCache.value = ret.Token.Id
+  tokenCache.expire = Date.now() + 23 * 3600 * 1000 // 23 h 后过期
+  return tokenCache.value
+}
+
+app.post('/asr', upload.single('file'), async (req, res) => {
+  const token = await getToken()
+  const url = 'https://nls-gateway-cn-beijing.aliyuncs.com/stream/v1/asr'
+  const file = fs.createReadStream(req.file.path)
+  const { data } = await axios.post(url, file, {
+    params: {
+      appkey: process.env.APP_KEY,
+      format: 'wav',
+      sample_rate: 16000,
+      enable_punctuation_prediction: true,
+    },
+    headers: {
+      'X-NLS-Token': token,
+      'Content-Type': 'application/octet-stream',
+    },
+  })
+  res.json(data)
 })
 
 app.listen(3000, () => {

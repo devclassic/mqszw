@@ -2,9 +2,15 @@
   <div class="page">
     <div class="img"></div>
     <div class="logo"></div>
+    <div v-if="state.isAsr" class="asr"></div>
     <div class="input-box">
       <input type="text" v-model="state.query" class="input" />
-      <div class="mic"></div>
+      <div
+        @mousedown="asrstart"
+        @mouseup="asrstop"
+        @touchstart="asrstart"
+        @touchend="asrstop"
+        class="mic"></div>
       <div @click="state.showList = !state.showList" class="btn"></div>
     </div>
     <div v-if="state.showList" class="list">
@@ -23,20 +29,46 @@
 </template>
 
 <script setup>
-  import { reactive } from 'vue'
+  import { reactive, watch } from 'vue'
   import { useInput } from '../hooks/useInput'
   import { useRouter } from 'vue-router'
   import { useLinkStore } from '../stores/useLinkStore'
+  import { useRecorder } from '../hooks/useRecorder'
 
   const state = reactive({
     showList: false,
     query: '',
+    isAsr: false,
+    isRecording: false,
   })
 
   useInput()
 
   const router = useRouter()
   const store = useLinkStore()
+  const recorder = useRecorder()
+
+  watch(
+    () => state.isRecording,
+    async isRecording => {
+      if (isRecording) {
+        recorder.start()
+        state.isAsr = true
+      } else {
+        state.isAsr = false
+        const text = await recorder.getResult()
+        state.query = text
+      }
+    }
+  )
+
+  const asrstart = () => {
+    state.isRecording = true
+  }
+
+  const asrstop = () => {
+    state.isRecording = false
+  }
 
   const submit = type => {
     store.type = type
@@ -156,5 +188,15 @@
     left: 50%;
     transform: translateX(-50%);
     bottom: 8.666666666666667vw;
+  }
+
+  .asr {
+    width: 20vw;
+    height: 20vw;
+    background: url('../assets/asr.gif') no-repeat center / 100% 100%;
+    z-index: 999;
+    position: absolute;
+    top: 110vw;
+    right: 15vw;
   }
 </style>
