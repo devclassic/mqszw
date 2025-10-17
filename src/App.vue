@@ -4,13 +4,29 @@
 
 <script setup>
   import { onMounted } from 'vue'
+  import { usePermissionStore } from './stores/usePermissionStore'
+
+  const permissionStore = usePermissionStore()
 
   onMounted(() => {
+    // 锁定 Android 浏览器的竖屏模式
+    // 仅在 Android 设备上生效
     if (!/android/i.test(navigator.userAgent)) return
     const html = document.documentElement
     const initH = window.innerHeight
     html.style.setProperty('--initH', `${initH}px`)
     html.classList.add('android-lock')
+    //请求浏览器录音权限
+    navigator.mediaDevices
+      .getUserMedia({ audio: true })
+      .then(stream => {
+        permissionStore.hasAudioPermission = true
+        console.log('录音权限已获取')
+      })
+      .catch(err => {
+        permissionStore.hasAudioPermission = true
+        console.error('获取录音权限失败:', err)
+      })
   })
 </script>
 

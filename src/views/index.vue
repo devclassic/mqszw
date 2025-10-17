@@ -34,6 +34,7 @@
   import { useRouter } from 'vue-router'
   import { useLinkStore } from '../stores/useLinkStore'
   import { useRecorder } from '../hooks/useRecorder'
+  import { usePermissionStore } from '../stores/usePermissionStore'
 
   const state = reactive({
     showList: false,
@@ -47,10 +48,15 @@
   const router = useRouter()
   const store = useLinkStore()
   const recorder = useRecorder()
+  const permissionStore = usePermissionStore()
 
   watch(
     () => state.isRecording,
     async isRecording => {
+      if (!permissionStore.hasAudioPermission) {
+        alert('未能获取录音权限')
+        return
+      }
       if (isRecording) {
         recorder.start()
         state.isAsr = true

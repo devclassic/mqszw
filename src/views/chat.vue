@@ -38,6 +38,7 @@
   import { reactive, onMounted, useTemplateRef, watch } from 'vue'
   import { fetchEventSource } from '@microsoft/fetch-event-source'
   import markdownit from 'markdown-it'
+  import { usePermissionStore } from '../stores/usePermissionStore'
 
   const state = reactive({
     query: '',
@@ -52,6 +53,7 @@
   const router = useRouter()
   const store = useLinkStore()
   const recorder = useRecorder()
+  const permissionStore = usePermissionStore()
   const md = markdownit()
 
   onMounted(() => {
@@ -103,6 +105,10 @@
   watch(
     () => state.isRecording,
     async isRecording => {
+      if (!permissionStore.hasAudioPermission) {
+        alert('未能获取录音权限')
+        return
+      }
       if (isRecording) {
         recorder.start()
         state.isAsr = true
