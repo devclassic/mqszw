@@ -88,7 +88,7 @@ app.post('/asr', upload.single('file'), async (req, res) => {
       'Content-Type': 'application/octet-stream',
     },
   })
-  await fs.remove(req.file.path)
+  await fs.unlink(req.file.path)
   res.json(data)
 })
 

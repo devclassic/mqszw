@@ -10,6 +10,7 @@
         @mouseup="asrstop"
         @touchstart="asrstart"
         @touchend="asrstop"
+        @touchcancel="asrstop"
         class="mic"></div>
       <div @click="state.showList = !state.showList" class="btn"></div>
     </div>

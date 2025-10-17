@@ -23,6 +23,7 @@
         @mouseup="asrstop"
         @touchstart="asrstart"
         @touchend="asrstop"
+        @touchcancel="asrstop"
         class="mic"></div>
       <div @click="submit" class="btn"></div>
     </div>
