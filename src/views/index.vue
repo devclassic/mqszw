@@ -71,6 +71,20 @@
 
   const asrstart = () => {
     state.isRecording = true
+    const stopOnce = () => {
+      asrstop()
+      cleanup()
+    }
+
+    const cleanup = () => {
+      window.removeEventListener('mouseup', stopOnce)
+      window.removeEventListener('touchend', stopOnce)
+      window.removeEventListener('touchcancel', cleanup)
+    }
+
+    window.addEventListener('mouseup', stopOnce, { once: true })
+    window.addEventListener('touchend', stopOnce, { once: true })
+    window.addEventListener('touchcancel', cleanup, { once: true })
   }
 
   const asrstop = () => {
