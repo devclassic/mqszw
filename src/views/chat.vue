@@ -36,7 +36,7 @@
   import { useRouter } from 'vue-router'
   import { useLinkStore } from '../stores/useLinkStore'
   import { useRecorder } from '../hooks/useRecorder'
-  import { reactive, onMounted, useTemplateRef, watch } from 'vue'
+  import { reactive, onMounted, useTemplateRef, watch, nextTick } from 'vue'
   import { fetchEventSource } from '@microsoft/fetch-event-source'
   import markdownit from 'markdown-it'
   import { usePermissionStore } from '../stores/usePermissionStore'
@@ -147,13 +147,18 @@
     router.push('/')
   }
 
-  const submit = () => {
+  const submit = async () => {
     if (!state.query.trim()) {
       return
     }
     state.messages.push({
       pos: 'right',
       text: state.query,
+    })
+    await nextTick()
+    state.wrapRef.scrollTo({
+      top: state.wrapRef.scrollHeight,
+      behavior: 'smooth',
     })
     const message = reactive({
       pos: 'left',
@@ -245,6 +250,10 @@
   .item {
     display: flex;
     margin-top: 5.333333333333333vw;
+  }
+
+  .item:last-child {
+    margin-bottom: 5.333333333333333vw;
   }
 
   .avatar {
