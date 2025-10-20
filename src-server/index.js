@@ -75,7 +75,7 @@ async function getToken() {
 app.post('/asr', upload.single('file'), async (req, res) => {
   const token = await getToken()
   const url = 'https://nls-gateway-cn-beijing.aliyuncs.com/stream/v1/asr'
-  const file = fs.createReadStream(req.file.path)
+  const file = await fs.readFile(req.file.path)
   const { data } = await axios.post(url, file, {
     params: {
       appkey: process.env.APP_KEY,
@@ -87,10 +87,6 @@ app.post('/asr', upload.single('file'), async (req, res) => {
       'X-NLS-Token': token,
       'Content-Type': 'application/octet-stream',
     },
-  })
-  await new Promise((resolve, reject) => {
-    file.on('close', resolve)
-    file.on('error', reject)
   })
   await fs.remove(req.file.path)
   res.json(data)
