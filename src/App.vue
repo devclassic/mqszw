@@ -41,6 +41,7 @@
   }
 
   onMounted(() => {
+    document.title = '“青松办”智慧政务管家'
     // 锁定 Android 浏览器的竖屏模式
     // 仅在 Android 设备上生效
     if (!/android/i.test(navigator.userAgent)) return
