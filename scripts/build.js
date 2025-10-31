@@ -6,4 +6,6 @@ fs.removeSync('release')
 await execa({ stdio: 'inherit' })`pnpm frontend:build`
 await execa({ stdio: 'inherit' })`pnpm backend:build`
 
-fs.copyFileSync('.env', 'release/.env')
+try {
+  fs.copyFileSync('.env', 'release/.env')
+} catch {}

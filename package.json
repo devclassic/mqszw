@@ -10,7 +10,7 @@
     "frontend:dev": "vite --host",
     "frontend:build": "vite build",
     "backend:dev": "node --watch src-server/index.js",
-    "backend:build": "deno compile -A --target x86_64-unknown-linux-gnu -o release/server src-server/index.js"
+    "backend:build": "bun build --compile --target=bun-linux-x64 --outfile release/server src-server/index.js"
   },
   "dependencies": {
     "@alicloud/pop-core": "^1.8.0",
