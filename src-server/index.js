@@ -66,7 +66,7 @@ async function getToken() {
     endpoint: 'http://nls-meta.cn-shanghai.aliyuncs.com',
     apiVersion: '2019-02-28',
     opts: {
-      timeout: 0,
+      timeout: 60000,
     },
   })
   const ret = await client.request('CreateToken')
