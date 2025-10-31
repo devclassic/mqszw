@@ -65,6 +65,9 @@ async function getToken() {
     accessKeySecret: process.env.ACCESS_KEY_SECRET,
     endpoint: 'http://nls-meta.cn-shanghai.aliyuncs.com',
     apiVersion: '2019-02-28',
+    opts: {
+      timeout: 0,
+    },
   })
   const ret = await client.request('CreateToken')
   tokenCache.value = ret.Token.Id
