@@ -43,7 +43,7 @@ app.post('/chat', async (req, res) => {
   const difyRes = await fetch(`${base}/chat-messages`, {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${token}`,
+      'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
@@ -65,9 +65,6 @@ async function getToken() {
     accessKeySecret: process.env.ACCESS_KEY_SECRET,
     endpoint: 'http://nls-meta.cn-shanghai.aliyuncs.com',
     apiVersion: '2019-02-28',
-    opts: {
-      timeout: 60000,
-    },
   })
   const ret = await client.request('CreateToken')
   tokenCache.value = ret.Token.Id
@@ -77,7 +74,7 @@ async function getToken() {
 
 app.post('/asr', upload.single('file'), async (req, res) => {
   const token = await getToken()
-  const url = 'https://nls-gateway-cn-beijing.aliyuncs.com/stream/v1/asr'
+  const url = 'https://nls-gateway-cn-shanghai.aliyuncs.com/stream/v1/asr'
   const file = await fs.readFile(req.file.path)
   const { data } = await axios.post(url, file, {
     params: {
@@ -89,6 +86,7 @@ app.post('/asr', upload.single('file'), async (req, res) => {
     headers: {
       'X-NLS-Token': token,
       'Content-Type': 'application/octet-stream',
+      'Host': 'nls-gateway-cn-shanghai.aliyuncs.com',
     },
   })
   await fs.remove(req.file.path)
