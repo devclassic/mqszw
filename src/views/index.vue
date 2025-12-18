@@ -66,7 +66,7 @@
         const text = await recorder.getResult()
         state.query = text
       }
-    }
+    },
   )
 
   const asrstart = () => {
@@ -113,8 +113,8 @@
   }
 
   .logo {
-    width: 49.73333333333333vw;
-    height: 7.333333333333333vw;
+    width: 58vw;
+    height: 8.666666666666667vw;
     background: url('../assets/index-logo.png') no-repeat center / 100% 100%;
     position: absolute;
     top: 113.3333333333333vw;
@@ -123,8 +123,8 @@
   }
 
   .input-box {
-    width: 81.2vw;
-    height: 7.466666666666667vw;
+    width: 94.66666666666667vw;
+    height: 8.666666666666667vw;
     background: url('../assets/index-input.png') no-repeat center / 100% 100%;
     position: absolute;
     top: 124.9333333333333vw;
@@ -133,29 +133,29 @@
   }
 
   .input {
-    width: 57.33333333333333vw;
-    height: 4vw;
-    line-height: 4vw;
+    width: 68vw;
+    height: 5.5vw;
+    line-height: 5.5vw;
     position: absolute;
     top: 1.733333333333333vw;
     left: 7.066666666666667vw;
-    font-size: 2.933333333333333vw;
+    font-size: 3.5vw;
     color: #969696;
     border: none;
     outline: none;
   }
 
   .mic {
-    width: 2.666666666666667vw;
-    height: 3.333333333333333vw;
+    width: 4vw;
+    height: 4vw;
     position: absolute;
     top: 2.133333333333333vw;
-    right: 13.06666666666667vw;
+    right: 15vw;
   }
 
   .btn {
-    width: 10.66666666666667vw;
-    height: 5.066666666666667vw;
+    width: 12.5vw;
+    height: 6vw;
     position: absolute;
     top: 1.2vw;
     right: 0.9333333333333333vw;
@@ -163,24 +163,25 @@
 
   .list {
     padding: 2vw;
+    width: 29.33333333333333vw;
     border: 1px solid #ebebeb;
     border-radius: 10px;
     position: absolute;
-    top: 132.6666666666667vw;
-    right: 9.333333333333333vw;
+    top: 134vw;
+    right: 3vw;
     background: #ffffff;
   }
 
   .item {
-    height: 5.333333333333333vw;
+    height: 6vw;
     display: flex;
     align-items: center;
     line-height: 1;
   }
 
   .icon {
-    width: 2.533333333333333vw;
-    height: 2.133333333333333vw;
+    width: 4vw;
+    height: 4vw;
   }
 
   .icon-1 {
@@ -192,7 +193,7 @@
   }
 
   .value {
-    font-size: 2.133333333333333vw;
+    font-size: 4vw;
     margin-left: 2vw;
   }
 

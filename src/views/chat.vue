@@ -118,7 +118,7 @@
         const text = await recorder.getResult()
         state.query = text
       }
-    }
+    },
   )
 
   const asrstart = () => {
@@ -264,10 +264,10 @@
 
   .message {
     width: fit-content;
-    max-width: 45.33333333333333vw;
+    max-width: 65vw;
     padding: 4vw;
     position: relative;
-    font-size: 2.666666666666667vw;
+    font-size: 3.733333333333333vw;
     color: #858585;
     border-radius: 5px;
   }
