@@ -193,7 +193,16 @@
             const data = JSON.parse(event.data)
             if (data.answer) {
               result += data.answer
-              message.text = md.render(result)
+              let text = ''
+              if (result.includes('</think>')) {
+                text = result.replace(/<think>[\s\S]*?<\/think>/g, '')
+              } else if (result.includes('<think>')) {
+                const idx = result.indexOf('<think>')
+                text = result.slice(0, idx)
+              } else {
+                text = result
+              }
+              message.text = md.render(text)
               state.wrapRef.scrollTo({
                 top: state.wrapRef.scrollHeight,
                 behavior: 'smooth',
