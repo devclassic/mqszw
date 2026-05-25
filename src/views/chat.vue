@@ -176,7 +176,7 @@
     state.messages.push(message)
     const ctrl = new AbortController()
     const base = import.meta.env.VITE_API_BASE || ''
-    let result = '正在思考中...'
+    let result = ''
     const query = state.query
     state.query = ''
     fetchEventSource(`${base}/chat`, {
@@ -208,6 +208,11 @@
                 top: state.wrapRef.scrollHeight,
                 behavior: 'smooth',
               })
+            } else {
+              if (!result) {
+                result += '正在思考中...'
+                message.text = md.render(result)
+              }
             }
           } catch {}
         }
