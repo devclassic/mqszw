@@ -176,7 +176,7 @@
     state.messages.push(message)
     const ctrl = new AbortController()
     const base = import.meta.env.VITE_API_BASE || ''
-    let result = ''
+    let result = '正在思考中...'
     const query = state.query
     state.query = ''
     fetchEventSource(`${base}/chat`, {
@@ -203,6 +203,7 @@
                 text = result
               }
               message.text = md.render(text)
+              result = result.replaceAll('正在思考中...', '')
               state.wrapRef.scrollTo({
                 top: state.wrapRef.scrollHeight,
                 behavior: 'smooth',
