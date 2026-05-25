@@ -57,7 +57,7 @@
   const permissionStore = usePermissionStore()
   const md = markdownit()
 
-  onMounted(() => {
+  onMounted(async () => {
     state.messages.push({
       pos: 'right',
       text: store.query,
@@ -67,9 +67,15 @@
       text: '',
     })
     state.messages.push(message)
+    let result = '正在思考中...'
+    message.text = md.render(result)
+    await nextTick()
+    state.wrapRef.scrollTo({
+      top: state.wrapRef.scrollHeight,
+      behavior: 'smooth',
+    })
     const ctrl = new AbortController()
     const base = import.meta.env.VITE_API_BASE || ''
-    let result = ''
     fetchEventSource(`${base}/chat`, {
       method: 'POST',
       headers: {
@@ -94,6 +100,7 @@
                 text = result
               }
               message.text = md.render(text)
+              result = result.replaceAll('正在思考中...', '')
               state.wrapRef.scrollTo({
                 top: state.wrapRef.scrollHeight,
                 behavior: 'smooth',
@@ -174,9 +181,15 @@
       text: '',
     })
     state.messages.push(message)
+    let result = '正在思考中...'
+    message.text = md.render(result)
+    await nextTick()
+    state.wrapRef.scrollTo({
+      top: state.wrapRef.scrollHeight,
+      behavior: 'smooth',
+    })
     const ctrl = new AbortController()
     const base = import.meta.env.VITE_API_BASE || ''
-    let result = ''
     const query = state.query
     state.query = ''
     fetchEventSource(`${base}/chat`, {
@@ -188,10 +201,6 @@
       signal: ctrl.signal,
       openWhenHidden: true,
       onmessage(event) {
-        if (!result) {
-          result += '正在思考中...'
-          message.text = md.render(result)
-        }
         if (event.data) {
           try {
             const data = JSON.parse(event.data)
