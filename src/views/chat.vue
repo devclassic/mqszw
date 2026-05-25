@@ -188,6 +188,10 @@
       signal: ctrl.signal,
       openWhenHidden: true,
       onmessage(event) {
+        if (!result) {
+          result += '正在思考中...'
+          message.text = md.render(result)
+        }
         if (event.data) {
           try {
             const data = JSON.parse(event.data)
@@ -208,11 +212,6 @@
                 top: state.wrapRef.scrollHeight,
                 behavior: 'smooth',
               })
-            } else {
-              if (!result) {
-                result += '正在思考中...'
-                message.text = md.render(result)
-              }
             }
           } catch {}
         }
